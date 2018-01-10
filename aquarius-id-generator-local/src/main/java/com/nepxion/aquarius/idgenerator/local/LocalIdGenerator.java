@@ -3,10 +3,9 @@ package com.nepxion.aquarius.idgenerator.local;
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2020</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -22,7 +21,7 @@ public interface LocalIdGenerator {
      * @param startTimestamp 起始计算时间戳(默认2017-01-01)
      * @param dataCenterId 数据中心标识ID
      * @param machineId 机器标识ID
-     * @return
+     * @return String
      */
     String nextUniqueId(long startTimestamp, long dataCenterId, long machineId);
 

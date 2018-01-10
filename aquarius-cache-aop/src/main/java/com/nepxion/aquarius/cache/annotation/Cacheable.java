@@ -3,10 +3,9 @@ package com.nepxion.aquarius.cache.annotation;
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2020</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -24,17 +23,20 @@ import java.lang.annotation.Target;
 public @interface Cacheable {
     /**
      * 缓存名字
+     * @return String
      */
     String name() default "";
 
     /**
      * 缓存Key
+     * @return String
      */
     String key() default "";
 
     /**
      * 过期时间
      * 单位毫秒，默认60秒
+     * @return long
      */
     long expire() default 60000L;
 }

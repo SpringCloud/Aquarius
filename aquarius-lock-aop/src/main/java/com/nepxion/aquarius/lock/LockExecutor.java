@@ -3,10 +3,9 @@ package com.nepxion.aquarius.lock;
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2020</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -22,8 +21,8 @@ public interface LockExecutor<T> {
      * @param waitTime 没有获取到锁时，等待时间(单位毫秒)
      * @param async 是否采用锁的异步执行方式
      * @param fair 是否采用公平锁
-     * @return
-     * @throws Exception
+     * @return T
+     * @throws Exception 异常
      */
     T tryLock(LockType lockType, String name, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Exception;
 

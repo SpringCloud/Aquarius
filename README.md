@@ -1,5 +1,7 @@
 # Nepxion Aquarius
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/Nepxion/Aquarius/blob/master/LICENSE)
+[![Maven Central](https://img.shields.io/maven-central/v/com.nepxion/aquarius.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.nepxion%22%20AND%20aquarius)
+[![Build Status](https://travis-ci.org/Nepxion/Aquarius.svg?branch=master)](https://travis-ci.org/Nepxion/Aquarius)
 
 Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合，包含分布式锁，缓存，ID生成器，限速限流器。它采用Nepxion Matrix AOP框架进行切面架构，提供注解调用方式，同时也提供API调用方式
 
@@ -15,6 +17,45 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
     支持Swagger，打开http://localhost:2222/swagger-ui.html访问
 
 ![Alt text](https://github.com/Nepxion/Aquarius/blob/master/aquarius-doc/Swagger.jpg)
+
+### 依赖
+
+```xml
+分布式锁
+<dependency>
+  <groupId>com.nepxion</groupId>
+  <artifactId>aquarius-assembly-lock</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+分布式缓存
+<dependency>
+  <groupId>com.nepxion</groupId>
+  <artifactId>aquarius-assembly-cache</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+分布式全局唯一ID
+<dependency>
+  <groupId>com.nepxion</groupId>
+  <artifactId>aquarius-assembly-id-generator</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+分布式限速限流
+<dependency>
+  <groupId>com.nepxion</groupId>
+  <artifactId>aquarius-assembly-limit</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+四个组件全集
+<dependency>
+  <groupId>com.nepxion</groupId>
+  <artifactId>aquarius-assembly-all</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+```
 
 ## Nepxion Aquarius Lock
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
@@ -707,6 +748,30 @@ public class CacheAopApplication {
     3 支持根据Twitter雪花ID本地算法，模拟分布式ID产生
       SnowFlake算法用来生成64位的ID，刚好可以用long整型存储，能够用于分布式系统中生产唯一的ID， 并且生成的ID有大致的顺序。 在这次实现中，生成的64位ID可以分成5个部分：
       0 - 41位时间戳 - 5位数据中心标识 - 5位机器标识 - 12位序列号
+
+```java
+/**
+ * The class Snowflake id generator. Created by paascloud.net@gmail.com
+ * Twitter雪花ID算法
+ * 概述
+ * - SnowFlake算法是Twitter设计的一个可以在分布式系统中生成唯一的ID的算法，它可以满足Twitter每秒上万条消息ID分配的请求，这些消息ID是唯一的且有大致的递增顺序
+ * 
+ * 原理
+ * - SnowFlake算法产生的ID是一个64位的整型，结构如下（每一部分用“-”符号分隔）：
+ *    0 - 0000000000 0000000000 0000000000 0000000000 0 - 00000 - 00000 - 000000000000
+ * - 1位标识部分，在java中由于long的最高位是符号位，正数是0，负数是1，一般生成的ID为正数，所以为0
+ * - 41位时间戳部分，这个是毫秒级的时间，一般实现上不会存储当前的时间戳，而是时间戳的差值（当前时间-固定的开始时间），这样可以使产生的ID从更小值开始；41位的时间戳可以使用69年，(1L << 41) / (1000L * 60 * 60 * 24 * 365) = 69年
+ * - 10位节点部分，Twitter实现中使用前5位作为数据中心标识，后5位作为机器标识，可以部署1024个节点
+ * - 12位序列号部分，12位的计数顺序号支持每个节点每毫秒(同一机器，同一时间戳)产生4096个ID序号，加起来刚好64位，为一个Long型
+ *  
+ * 优点
+ * - SnowFlake的优点是，整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞(由数据中心ID和机器ID作区分)，并且效率较高，经测试，SnowFlake每秒能够产生26万ID左右
+ * 
+ * 使用
+ * - SnowFlake算法生成的ID大致上是按照时间递增的，用在分布式系统中时，需要注意数据中心标识和机器标识必须唯一，这样就能保证每个节点生成的ID都是唯一的。
+ *   或许我们不一定都需要像上面那样使用5位作为数据中心标识，5位作为机器标识，可以根据我们业务的需要，灵活分配节点部分，如：若不需要数据中心，完全可以使用全部10位作为机器标识；若数据中心不多，也可以只使用3位作为数据中心，7位作为机器标识
+ */
+```
 
 ### 示例
 使用ID Generator示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.idgenerator
