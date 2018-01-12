@@ -3,7 +3,7 @@ package com.nepxion.aquarius.common.context;
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017-2020</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -17,7 +17,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-@Component("contextAware")
+@Component
 public class AquariusContextAware implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
@@ -31,7 +31,7 @@ public class AquariusContextAware implements ApplicationContextAware {
         System.out.println("╚╝─╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
         System.out.println("      ║║");
         System.out.println("      ╚╝");
-        System.out.println("Nepxion Aquarius  v1.0.0.RELEASE");
+        System.out.println("Nepxion Aquarius  v1.0.6");
         System.out.println("");
     }
 

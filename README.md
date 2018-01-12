@@ -12,7 +12,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
     1 Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
     2 Nepxion Aquarius Cache 分布式缓存(支持Redis)
     3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
-    4 Nepxion Aquarius Limit 分布式限速限流(支持Redis)
+    4 Nepxion Aquarius Limit 分布式限速限流(支持Redis、本地限速限流)
 
     上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
     支持Swagger，打开http://localhost:2222/swagger-ui.html访问
@@ -21,6 +21,16 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 
 ### 依赖
 
+Aop框架引用(如果用到Aop框架，必须引入此包)
+```xml
+<dependency>
+  <groupId>com.nepxion</groupId>
+  <artifactId>matrix-aop</artifactId>
+  <version>${matrix.version}</version>
+</dependency>
+```
+
+笼统化引用
 ```xml
 分布式锁
 <dependency>
@@ -54,6 +64,72 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 <dependency>
   <groupId>com.nepxion</groupId>
   <artifactId>aquarius-assembly-all</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+```
+
+精细化引用(只挑选跟自己感兴趣的组件)
+```xml
+Redis分布式锁
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-lock-redis</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+Zookeeper分布式锁
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-lock-zookeeper</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+本地锁
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-lock-local</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+Redis分布式缓存
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-cache-redis</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+Redis唯一ID产生器
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-id-generator-redis</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+Zookeeper唯一序号产生器
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-id-generator-zookeeper</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+本地唯一ID产生器
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-id-generator-local</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+Redis限速限流
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-limit-redis</artifactId>
+  <version>${aquarius.version}</version>
+</dependency>
+
+本地限速限流
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>aquarius-limit-local</artifactId>
   <version>${aquarius.version}</version>
 </dependency>
 ```
@@ -122,7 +198,6 @@ package com.nepxion.aquarius.lock.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -145,7 +220,6 @@ package com.nepxion.aquarius.lock.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -191,7 +265,6 @@ package com.nepxion.aquarius.lock;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -245,7 +318,6 @@ package com.nepxion.aquarius.lock;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -343,7 +415,6 @@ package com.nepxion.aquarius.lock.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -364,7 +435,6 @@ package com.nepxion.aquarius.lock.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -404,7 +474,6 @@ package com.nepxion.aquarius.lock;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -470,7 +539,6 @@ package com.nepxion.aquarius.lock;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -594,7 +662,6 @@ package com.nepxion.aquarius.cache.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -623,7 +690,6 @@ package com.nepxion.aquarius.cache.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -691,7 +757,6 @@ package com.nepxion.aquarius.cache;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -785,7 +850,6 @@ package com.nepxion.aquarius.idgenerator;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -880,7 +944,6 @@ package com.nepxion.aquarius.idgenerator;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -975,7 +1038,6 @@ package com.nepxion.aquarius.idgenerator;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1093,7 +1155,6 @@ package com.nepxion.aquarius.limit.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1114,7 +1175,6 @@ package com.nepxion.aquarius.limit.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1146,7 +1206,6 @@ package com.nepxion.aquarius.limit;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1208,7 +1267,6 @@ package com.nepxion.aquarius.limit;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
