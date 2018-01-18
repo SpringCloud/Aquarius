@@ -14,6 +14,9 @@ import java.util.TimerTask;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
@@ -22,9 +25,9 @@ import com.nepxion.aquarius.limit.service.MyService8Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
-public class RedisLimitAopApplication {
+public class LimitAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(RedisLimitAopApplication.class, args);
+        SpringApplication.run(LimitAopApplication.class, args);
 
         MyService7 myService7 = AquariusContextAware.getBean(MyService7.class);
         Timer timer1 = new Timer();
@@ -53,5 +56,13 @@ public class RedisLimitAopApplication {
                 }).start();
             }
         }, 0L, 4000L);
+    }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8085);
+
+        return tomcatFactory;
     }
 }

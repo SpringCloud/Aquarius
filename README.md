@@ -21,15 +21,6 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 
 ### 依赖
 
-Aop框架引用(如果用到Aop框架，必须引入此包)
-```xml
-<dependency>
-  <groupId>com.nepxion</groupId>
-  <artifactId>matrix-aop</artifactId>
-  <version>${matrix.version}</version>
-</dependency>
-```
-
 笼统化引用
 ```xml
 分布式锁
@@ -177,10 +168,9 @@ aquarius-spring-boot-example\src\main\resources\application.properties，切换l
 ```java
 # Lock config
 # redisLock, zookeeperLock, localLock
-lockType=redisLock
+lock.type=redisLock
 # 指定你使用相关注解所在的接口或者类的目录
-# 扫描目录，如果不指定，则扫描全局。两种方式运行结果没区别，只是指定扫描目录加快扫描速度，同时可以减少缓存量
-lockScanPackages=com.nepxion.aquarius.lock
+lock.scan.packages=com.nepxion.aquarius.lock
 ```
 
 ### 示例
@@ -650,6 +640,13 @@ public class ReadWriteLockApplication {
        5)beforeInvocation 缓存清理是在方法调用前还是调用后（只用于CacheEvict）
     2 缓存的Key在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和name，key组成一个SPEL语义，即[prefix]_[name]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
     3 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
+
+### 切换缓存类型
+```java
+# Cache config
+cache.type=redisCache
+cache.scan.packages=com.nepxion.aquarius.cache
+```
 
 ### 示例
 使用分布式缓存示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.cache
@@ -1133,13 +1130,13 @@ public class LocalIdGeneratorApplication {
       3)limitPeriod 给定的时间段(单位为秒)
       4)limitCount 最多的访问限制次数
 
-### 切换锁类型
+### 切换限流限速器类型
 aquarius-spring-boot-example\src\main\resources\application.properties，切换limitType即可
 ```java
 # Limit config
 # redisLimit, localLimit
-limitType=redisLimit
-limitScanPackages=com.nepxion.aquarius.limit
+limit.type=redisLimit
+limit.scan.packages=com.nepxion.aquarius.limit
 ```
 
 ### 示例
